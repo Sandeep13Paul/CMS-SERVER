@@ -127,7 +127,7 @@ public class ContactController {
         return ResponseEntity.ok("deleted");
     }
 
-    @PostMapping("/update")
+    @PutMapping("/update")
     public ResponseEntity<?> updateContact(@Valid ContactForm contactForm, @RequestParam(value = "id") String contactId, @RequestParam(value = "contactPic") MultipartFile file, Authentication authentication) {
         System.out.println("Update form");
         Contact contact1 = new Contact();
@@ -151,6 +151,20 @@ public class ContactController {
         System.out.println("After updation");
 
         return ResponseEntity.ok("Updated");
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchContact(@RequestParam("field") String field, @RequestParam("keyword") String keyword, @RequestParam(value = "page", defaultValue = "0") int page, @RequestParam(value = "size", defaultValue = "5") int size, @RequestParam(value = "direction", defaultValue = "asc") String sortDirection, Authentication authentication) {
+        System.out.println("I am inside search backend");
+        System.out.println(field);
+        System.out.println(keyword);
+
+        String username = Helper.getEmailOfLoggedInUser(authentication);
+        System.out.println(username);
+        User user = this.userService.getUserByEmail(username);
+
+        Page<Contact> contacts = this.contactService.searchContact(user, field, keyword, page, size, sortDirection);
+        return ResponseEntity.ok(contacts);
     }
 
 }

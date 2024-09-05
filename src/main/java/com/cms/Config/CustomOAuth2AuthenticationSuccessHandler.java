@@ -84,7 +84,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
                 System.out.println("Generated JWT Token: " + token);
 
                 // Redirect to frontend with the token in the URL
-                String redirectUrl = "https://cms-manager-azure.vercel.app/user/dashboard?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
+                String redirectUrl = "http://localhost:5173/user/dashboard?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
                 response.sendRedirect(redirectUrl);
             }
         }
@@ -126,7 +126,7 @@ public class CustomOAuth2AuthenticationSuccessHandler implements AuthenticationS
                 System.out.println("Generated JWT Token: " + token);
 
                 // Redirect to frontend with the token in the URL
-                String redirectUrl = "https://cms-manager-azure.vercel.app/user/dashboard?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
+                String redirectUrl = "http://localhost:5173/user/dashboard?token=" + URLEncoder.encode(token, StandardCharsets.UTF_8.toString());
                 response.sendRedirect(redirectUrl);
             }
         }

@@ -6,11 +6,9 @@ import com.cms.Models.User;
 import com.cms.Repositories.ContactRepository;
 import com.cms.Repositories.userRepository;
 import com.cms.Services.ContactService;
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -84,8 +82,25 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public List<Contact> searchContact(String name, String email, String phone) {
-        return this.contactRepository.findByContactName(name);
+    public Page<Contact> searchContact(User user, String field, String keyword, int page, int size, String sortDirection) {
+
+        Page<Contact> contactsPage = null;
+        Sort sort = sortDirection.equals("desc") ? Sort.by(field).descending() : Sort.by(field).ascending();
+        var pageable = PageRequest.of(page, size, sort);
+
+        if (field.equalsIgnoreCase("name")) {
+
+            contactsPage = this.contactRepository.findContactsByContactName(user, keyword, pageable);
+        }
+        else if (field.equalsIgnoreCase("email")) {
+
+            contactsPage = this.contactRepository.findContactsByContactEmail(user, keyword, pageable);
+        }
+        else if (field.equalsIgnoreCase("phone")) {
+
+            contactsPage = this.contactRepository.findContactsByContactPhone(user, keyword, pageable);
+        }
+        return contactsPage;
     }
 
     @Override
